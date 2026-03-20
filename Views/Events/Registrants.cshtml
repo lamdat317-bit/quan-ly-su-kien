@@ -1,0 +1,71 @@
+@model DoAn.Models.Event
+@{
+    ViewData["Title"] = "Danh sách người đăng ký";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 fw-bold text-dark mb-0">DANH SÁCH ĐĂNG KÝ</h1>
+        <p class="text-muted mb-0">Sự kiện: <strong>@Model.Title</strong></p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">Quay lại</a>
+</div>
+
+<div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Họ tên</th>
+                        <th>Số điện thoại</th>
+                        <th>Số ghế</th>
+                        <th>Ngày đăng ký</th>
+                        <th>Trạng thái</th>
+                        <th class="text-end pe-4">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Registrations.OrderByDescending(r => r.RegistrationDate))
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="fw-bold text-primary">@item.User?.FullName</div>
+                                <div class="small text-muted">@item.User?.Email</div>
+                            </td>
+                            <td>@item.PhoneNumber</td>
+                            <td>
+                                <span class="badge bg-info text-dark">@item.SeatNumber</span>
+                            </td>
+                            <td>@item.RegistrationDate.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                @if (item.IsCheckedIn)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i> Đã điểm danh
+                                    </span>
+                                    <div class="small text-muted mt-1">@item.CheckInTime?.ToString("HH:mm")</div>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Chưa đến</span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                <a asp-controller="Registrations" asp-action="Ticket" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                    <i class="fas fa-ticket-alt"></i> Xem vé
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Registrations.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">Chưa có người nào đăng ký tham gia sự kiện này.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

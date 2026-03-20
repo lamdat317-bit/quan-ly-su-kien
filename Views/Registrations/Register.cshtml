@@ -1,0 +1,48 @@
+@model DoAn.Models.Registration
+@{
+    ViewData["Title"] = "Đăng ký tham gia";
+}
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="bg-primary text-white p-4">
+                <h3 class="fw-bold mb-0">THÔNG TIN ĐĂNG KÝ</h3>
+                <p class="mb-0 opacity-75">Sự kiện: @Model.Event?.Title</p>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Register" method="post">
+                    <input type="hidden" asp-for="EventId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="0xxx.xxx.xxx" required />
+                        </div>
+                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="SeatNumber" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-chair"></i></span>
+                            <input asp-for="SeatNumber" class="form-control" placeholder="Ví dụ: A-12, B-05 hoặc Tự do" />
+                        </div>
+                        <small class="text-muted">Chọn vị trí ngồi mong muốn của bạn.</small>
+                    </div>
+
+                    <div class="alert alert-info border-0 bg-light p-3 small mb-4">
+                        <i class="fas fa-info-circle me-2"></i> Thông tin này sẽ được in trên vé QR của bạn để ban tổ chức đối soát tại sự kiện.
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a asp-controller="Events" asp-action="Details" asp-route-id="@Model.EventId" class="btn btn-light rounded-pill px-4">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 flex-grow-1 fw-bold shadow-sm">XÁC NHẬN ĐĂNG KÝ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

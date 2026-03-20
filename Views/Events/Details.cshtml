@@ -1,0 +1,85 @@
+@model DoAn.Models.Event
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index">Sự kiện</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Chi tiết</li>
+  </ol>
+</nav>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4 shadow-sm border-0">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="card-img-top" alt="@Model.Title" style="max-height: 400px; object-fit: cover;">
+            }
+            <div class="card-body">
+                <h1 class="card-title fw-bold text-primary">@Model.Title</h1>
+                <hr>
+                <div class="mb-4">
+                    <h5 class="fw-bold"><i class="fas fa-info-circle me-2"></i>Mô tả sự kiện</h5>
+                    <p style="white-space: pre-line;">@Model.Description</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Thông tin chi tiết</h5>
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <i class="fas fa-calendar-day text-primary me-2 fa-fw"></i>
+                        <strong>Bắt đầu:</strong><br>
+                        <span class="ms-4">@Model.StartTime.ToString("dddd, dd MMMM yyyy HH:mm")</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-calendar-check text-primary me-2 fa-fw"></i>
+                        <strong>Kết thúc:</strong><br>
+                        <span class="ms-4">@Model.EndTime.ToString("dddd, dd MMMM yyyy HH:mm")</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-map-marker-alt text-danger me-2 fa-fw"></i>
+                        <strong>Địa điểm:</strong><br>
+                        <span class="ms-4">@Model.Location</span>
+                    </li>
+                    <li class="mb-3">
+                        <i class="fas fa-users text-success me-2 fa-fw"></i>
+                        <strong>Số lượng:</strong><br>
+                        <span class="ms-4">
+                            @if (Model.MaxAttendees.HasValue)
+                            {
+                                @Model.Registrations.Count @:/ @Model.MaxAttendees.Value <span>chỗ</span>
+                            }
+                            else
+                            {
+                                <span>Không giới hạn</span>
+                            }
+                        </span>
+                    </li>
+                </ul>
+                <hr>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Registrants" asp-route-id="@Model.Id" class="btn btn-primary btn-lg w-100 shadow-sm rounded-pill py-3 fw-bold mb-3">
+                        <i class="fas fa-users me-2"></i>QUẢN LÝ NGƯỜI THAM GIA
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning w-100 rounded-pill py-2 fw-bold">
+                        <i class="fas fa-edit me-2"></i>SỬA THÔNG TIN
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Registrations" asp-action="Register" asp-route-eventId="@Model.Id" class="btn btn-primary btn-lg w-100 shadow-sm rounded-pill py-3 fw-bold">
+                        <i class="fas fa-ticket-alt me-2"></i>ĐĂNG KÝ THAM GIA
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

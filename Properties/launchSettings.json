@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "QUẢN LÝ SỰ KIỆN": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:5000",
+      "devTunnelEnabled": true,
+      "devTunnelAccess": "public",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

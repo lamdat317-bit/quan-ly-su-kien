@@ -1,0 +1,61 @@
+@model DoAn.Models.Event
+
+@{
+    ViewData["Title"] = "Tạo sự kiện";
+}
+
+<div class="card shadow border-0 max-width-600 mx-auto mt-4">
+    <div class="card-header bg-primary text-white py-3">
+        <h5 class="mb-0 fw-bold">Tạo sự kiện mới</h5>
+    </div>
+    <div class="card-body p-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label fw-bold"></label>
+                <input asp-for="Title" class="form-control" placeholder="Nhập tên sự kiện" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label fw-bold"></label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập mô tả chi tiết"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Location" class="form-label fw-bold"></label>
+                <input asp-for="Location" class="form-control" placeholder="Nhập địa điểm tổ chức" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StartTime" class="form-label fw-bold"></label>
+                    <input asp-for="StartTime" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="EndTime" class="form-label fw-bold"></label>
+                    <input asp-for="EndTime" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="MaxAttendees" class="form-label fw-bold"></label>
+                <input asp-for="MaxAttendees" class="form-control" type="number" />
+                <span asp-validation-for="MaxAttendees" class="text-danger"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="ImageUrl" class="form-label fw-bold"></label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="Dán link ảnh (https://...)" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a asp-action="Index" class="btn btn-light px-4">Hủy</a>
+                <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">Tạo ngay</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

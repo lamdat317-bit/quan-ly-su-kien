@@ -1,0 +1,119 @@
+@{
+    ViewData["Title"] = "Quét mã QR";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card shadow border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0 text-center fw-bold"><i class="fas fa-camera me-2"></i>QUÉT MÃ QR ĐIỂM DANH</h5>
+            </div>
+            <div class="card-body p-4">
+                <div id="reader" style="width: 100%; border-radius: 12px; overflow: hidden;" class="mb-4 bg-light"></div>
+                
+                <div class="mt-4">
+                    <label class="form-label small fw-bold text-muted">NHẬP MÃ THỦ CÔNG (NẾU QR KHÔNG QUÉT ĐƯỢC)</label>
+                    <div class="input-group mb-3">
+                        <input type="text" id="manualCode" class="form-control" placeholder="Mã đăng ký..." />
+                        <button class="btn btn-primary px-4" type="button" onclick="verifyCode($('#manualCode').val())">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="result-status" class="text-center mt-3" style="display:none;">
+                    <div class="spinner-border text-primary spinner-border-sm me-2" role="status"></div>
+                    <span class="text-primary fw-bold">Đang xác thực...</span>
+                </div>
+            </div>
+            <div class="card-footer bg-light p-3 text-center border-0">
+                <a asp-action="History" class="btn btn-sm btn-outline-secondary rounded-pill">
+                    <i class="fas fa-history me-1"></i>Lịch sử điểm danh hôm nay
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        let lastResult = "";
+        let isProcessing = false;
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // Tránh quét lại cùng một mã quá nhanh
+            if (decodedText !== lastResult && !isProcessing) {
+                lastResult = decodedText;
+                verifyCode(decodedText);
+            }
+        }
+
+        function verifyCode(code) {
+            if (!code || isProcessing) return;
+            
+            isProcessing = true;
+            $('#result-status').fadeIn();
+            $('#manualCode').val(code);
+
+            $.post('/CheckIn/Verify', { code: code }, function (response) {
+                $('#result-status').fadeOut();
+                
+                if (response.success) {
+                    Swal.fire({
+                        title: '<h3 class="text-success fw-bold">ĐIỂM DANH THÀNH CÔNG</h3>',
+                        html: `
+                            <div class="card border-primary mb-3 text-start">
+                                <div class="card-body">
+                                    <h5 class="fw-bold text-primary mb-1">${response.userName}</h5>
+                                    <div class="small text-muted mb-2"><i class="fas fa-phone me-1"></i> ${response.phoneNumber}</div>
+                                    <hr class="my-2">
+                                    <p class="mb-1">Sự kiện: <b>${response.eventTitle}</b></p>
+                                    <p class="mb-0 text-danger fw-bold"><i class="fas fa-chair me-1"></i> VỊ TRÍ GHẾ: ${response.seatNumber}</p>
+                                </div>
+                            </div>
+                            <div class="small text-muted">Thời gian: ${response.checkInTime}</div>`,
+                        icon: 'success',
+                        confirmButtonText: 'TIẾP TỤC QUÉT',
+                        confirmButtonColor: '#0d6efd'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Thất bại',
+                        text: response.message,
+                        icon: 'error',
+                        confirmButtonText: 'Đóng',
+                        confirmButtonColor: '#d33'
+                    });
+                }
+                
+                // Cho phép quét mã tiếp theo sau 2 giây
+                setTimeout(() => { 
+                    isProcessing = false; 
+                    lastResult = ""; 
+                    $('#manualCode').val('');
+                }, 2000);
+
+            }).fail(function() {
+                $('#result-status').fadeOut();
+                Swal.fire('Lỗi', 'Không thể kết nối đến máy chủ!', 'error');
+                isProcessing = false;
+                lastResult = "";
+            });
+        }
+
+        // Cấu hình Scanner
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", 
+            { 
+                fps: 15, 
+                qrbox: { width: 250, height: 250 },
+                rememberLastUsedCamera: true,
+                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+            },
+            /* verbose= */ false
+        );
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
+}

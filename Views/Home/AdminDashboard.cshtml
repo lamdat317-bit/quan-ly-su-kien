@@ -1,0 +1,111 @@
+@model IEnumerable<DoAn.Models.Registration>
+@{
+    ViewData["Title"] = "Bảng điều khiển Admin";
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 bg-primary text-white p-4">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-calendar-alt fa-3x opacity-50 me-4"></i>
+                <div>
+                    <h6 class="mb-0 opacity-75">TỔNG SỰ KIỆN</h6>
+                    <h2 class="fw-bold mb-0">@ViewBag.TotalEvents</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 bg-success text-white p-4">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-users fa-3x opacity-50 me-4"></i>
+                <div>
+                    <h6 class="mb-0 opacity-75">TỔNG NGƯỜI ĐĂNG KÝ</h6>
+                    <h2 class="fw-bold mb-0">@ViewBag.TotalRegistrations</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 bg-info text-white p-4">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-check-double fa-3x opacity-50 me-4"></i>
+                <div>
+                    <h6 class="mb-0 opacity-75">ĐÃ THAM GIA (CHECK-IN)</h6>
+                    <h2 class="fw-bold mb-0">@ViewBag.CheckedInCount</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0 text-dark">NHỮNG NGƯỜI VỪA ĐẾN (LỊCH SỬ GẦN ĐÂY)</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light small fw-bold">
+                            <tr>
+                                <th class="ps-4">KHÁCH MỜI</th>
+                                <th>SỰ KIỆN</th>
+                                <th>THỜI GIAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold">@item.User?.FullName</div>
+                                        <div class="small text-muted">@item.PhoneNumber</div>
+                                    </td>
+                                    <td>@item.Event?.Title</td>
+                                    <td><span class="badge bg-light text-dark">@item.CheckInTime?.ToString("HH:mm:ss")</span></td>
+                                </tr>
+                            }
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center py-5 text-muted small">Chưa có ai check-in trong hôm nay.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer bg-white border-0 text-center py-3">
+                <a asp-controller="CheckIn" asp-action="History" class="small text-primary text-decoration-none fw-bold">Xem tất cả lịch sử &rarr;</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0 text-dark">LỐI TẮT QUẢN TRỊ</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-3">
+                    <a asp-controller="CheckIn" asp-action="Scan" class="btn btn-primary btn-lg rounded-4 p-3 shadow-sm border-0">
+                        <i class="fas fa-camera fa-2x d-block mb-2"></i>
+                        <span class="fw-bold">MỞ CAMERA QUÉT MÃ QR</span>
+                    </a>
+                    <a asp-controller="Events" asp-action="Create" class="btn btn-outline-primary btn-lg rounded-4 p-3 border-dashed">
+                        <i class="fas fa-plus-circle fa-2x d-block mb-2"></i>
+                        <span class="fw-bold">TẠO SỰ KIỆN MỚI</span>
+                    </a>
+                    <a asp-controller="Events" asp-action="Index" class="btn btn-outline-dark rounded-pill py-2">
+                        <i class="fas fa-list-ul me-2"></i>Quản lý danh sách sự kiện
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .border-dashed { border-style: dashed !important; border-width: 2px !important; }
+</style>

@@ -1,0 +1,72 @@
+@model DoAn.Controllers.RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center py-4">
+                <h3 class="fw-bold mb-0 text-uppercase">Đăng ký hệ thống</h3>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="FullName" class="form-label small fw-bold text-muted text-uppercase">Họ và tên</label>
+                        <input asp-for="FullName" class="form-control rounded-pill px-3 border-primary-subtle" placeholder="Nguyễn Văn A" />
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label small fw-bold text-muted text-uppercase">Email đăng nhập</label>
+                        <input asp-for="Email" class="form-control rounded-pill px-3 border-primary-subtle" placeholder="email@example.com" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label small fw-bold text-muted text-uppercase">Mật khẩu</label>
+                        <input asp-for="Password" class="form-control rounded-pill px-3 border-primary-subtle" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label small fw-bold text-muted text-uppercase">Xác nhận mật khẩu</label>
+                        <input asp-for="ConfirmPassword" class="form-control rounded-pill px-3 border-primary-subtle" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted text-uppercase">Bạn đăng ký với tư cách:</label>
+                        <div class="d-grid gap-2 mt-2">
+                            <div class="form-check card p-2 border-primary-subtle">
+                                <input class="form-check-input ms-0 me-2" type="radio" asp-for="Role" value="User" checked id="roleUser">
+                                <label class="form-check-label fw-bold text-success" for="roleUser">
+                                    <i class="fas fa-user me-1"></i>Khách tham dự (Người dùng)
+                                </label>
+                            </div>
+                            <div class="form-check card p-2 border-primary-subtle">
+                                <input class="form-check-input ms-0 me-2" type="radio" asp-for="Role" value="Staff" id="roleStaff">
+                                <label class="form-check-label fw-bold text-info" for="roleStaff">
+                                    <i class="fas fa-user-check me-1"></i>Nhân viên (Điểm danh khách)
+                                </label>
+                            </div>
+                            <div class="form-check card p-2 border-primary-subtle">
+                                <input class="form-check-input ms-0 me-2" type="radio" asp-for="Role" value="Admin" id="roleAdmin">
+                                <label class="form-check-label fw-bold text-danger" for="roleAdmin">
+                                    <i class="fas fa-user-shield me-1"></i>Ban tổ chức (Toàn quyền)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow">ĐĂNG KÝ NGAY</button>
+                </form>
+            </div>
+            <div class="card-footer bg-light text-center py-3 border-0">
+                <p class="mb-0 small text-muted">Đã có tài khoản? <a asp-area="Identity" asp-page="/Account/Login" class="text-decoration-none">Đăng nhập</a></p>
+            </div>
+        </div>
+    </div>
+</div>

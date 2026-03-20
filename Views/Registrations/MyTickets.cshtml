@@ -1,0 +1,65 @@
+@model IEnumerable<DoAn.Models.Registration>
+@{
+    ViewData["Title"] = "Vé của tôi";
+    var qrCodes = ViewBag.QrCodes as Dictionary<int, string>;
+}
+
+<div class="mb-5">
+    <div class="d-flex align-items-center mb-2">
+        <i class="fas fa-ticket-alt text-primary fa-2x me-3"></i>
+        <h1 class="h3 mb-0 fw-bold">VÉ THAM GIA CỦA BẠN</h1>
+    </div>
+    <p class="text-muted">Xuất trình mã QR bên dưới tại cửa check-in của sự kiện.</p>
+</div>
+
+<div class="row">
+    @if (!Model.Any())
+    {
+        <div class="col-12 text-center py-5">
+            <div class="bg-white p-5 rounded-4 shadow-sm">
+                <i class="fas fa-calendar-times fa-4x text-light mb-3"></i>
+                <h5 class="text-muted">Bạn chưa đăng ký sự kiện nào.</h5>
+                <a asp-controller="Events" asp-action="Index" class="btn btn-primary mt-3 px-4 rounded-pill">Khám phá sự kiện ngay</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card shadow-sm border-0 rounded-4 overflow-hidden h-100">
+                    <div class="card-header @(item.IsCheckedIn ? "bg-success" : "bg-primary") text-white text-center py-2">
+                        <small class="fw-bold">@(item.IsCheckedIn ? "ĐÃ THAM GIA" : "CHƯA ĐIỂM DANH")</small>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <h5 class="card-title fw-bold text-dark mb-3">@item.Event?.Title</h5>
+                        
+                        <!-- TỰ ĐỘNG HIỂN THỊ MÃ QR TẠI ĐÂY -->
+                        <div class="bg-light p-3 rounded-3 mb-3 d-inline-block">
+                            @if (qrCodes != null && qrCodes.ContainsKey(item.Id))
+                            {
+                                <img src="data:image/png;base64,@qrCodes[item.Id]" class="img-fluid" style="width: 150px;" alt="QR Code" />
+                            }
+                        </div>
+                        
+                        <div class="small text-start mb-2">
+                            <i class="fas fa-map-marker-alt text-danger me-2"></i> @item.Event?.Location
+                        </div>
+                        <div class="small text-start mb-3">
+                            <i class="fas fa-clock text-info me-2"></i> @item.Event?.StartTime.ToString("HH:mm dd/MM/yyyy")
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="d-grid gap-2">
+                            <a asp-action="Ticket" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm rounded-pill">
+                                <i class="fas fa-print me-1"></i> Chi tiết & In vé
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

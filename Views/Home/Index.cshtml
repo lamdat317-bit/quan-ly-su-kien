@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+<div class="bg-primary text-white py-5 mb-5 rounded-4 shadow-lg position-relative overflow-hidden">
+    <div class="container py-4 position-relative" style="z-index: 2;">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3">Hệ thống quản lý sự kiện & Điểm danh QR</h1>
+                <p class="lead mb-4">Giải pháp hiện đại giúp bạn tổ chức sự kiện chuyên nghiệp, quản lý người tham gia và điểm danh nhanh chóng chỉ với một lần quét.</p>
+                <div class="d-flex gap-3">
+                    <a asp-controller="Events" asp-action="Index" class="btn btn-light btn-lg px-4 fw-bold text-primary rounded-pill shadow">Khám phá sự kiện</a>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-light btn-lg px-4 rounded-pill">Đăng ký ngay</a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block text-center">
+                <i class="fas fa-qrcode fa-10x opacity-25"></i>
+            </div>
+        </div>
+    </div>
+    <!-- Decorative elements -->
+    <div class="position-absolute" style="top: -50px; right: -50px; width: 300px; height: 300px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+</div>
+
+<div class="row text-center g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card h-100 p-4 border-0 shadow-sm rounded-4">
+            <div class="mb-3 text-primary"><i class="fas fa-calendar-check fa-3x"></i></div>
+            <h4 class="fw-bold">Đăng ký dễ dàng</h4>
+            <p class="text-muted">Người dùng có thể tìm kiếm và đăng ký tham gia các sự kiện chỉ với vài cú nhấp chuột.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 p-4 border-0 shadow-sm rounded-4">
+            <div class="mb-3 text-success"><i class="fas fa-qrcode fa-3x"></i></div>
+            <h4 class="fw-bold">Mã QR cá nhân</h4>
+            <p class="text-muted">Mỗi đăng ký sẽ được cấp một mã QR duy nhất để sử dụng khi điểm danh tại cửa.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 p-4 border-0 shadow-sm rounded-4">
+            <div class="mb-3 text-info"><i class="fas fa-bolt fa-3x"></i></div>
+            <h4 class="fw-bold">Điểm danh tức thì</h4>
+            <p class="text-muted">Ban tổ chức quét mã QR để ghi nhận sự hiện diện của khách mời ngay lập tức.</p>
+        </div>
+    </div>
+</div>
+
+<div class="text-center py-5 border-top">
+    <h2 class="fw-bold mb-4">Bạn đã sẵn sàng?</h2>
+    <a asp-controller="Events" asp-action="Index" class="btn btn-primary btn-lg px-5 rounded-pill shadow">Xem danh sách sự kiện</a>
+</div>
